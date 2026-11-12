@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Movers4U — Move, rent, buy, furnish</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#14213d;--bg:#f4f6fa;--card:#fff;--line:#dfe4ee;--mut:#5b6784;--gold:#fca311;--teal:#0e7c7b;--rani:#d81e5b;--ok:#1a8f5a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--ink:#eef1f8;--bg:#0d1424;--card:#16203a;--line:#27345a;--mut:#9aa6c6}}
+*{box-sizing:border-box}html{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 15px/1.5 'Hanken Grotesk',system-ui,sans-serif}
+h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;margin:0;letter-spacing:-.02em}
+nav{display:flex;align-items:center;gap:6px;padding:12px 24px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;overflow-x:auto}
+.logo{font:800 22px 'Bricolage Grotesque',sans-serif;margin-right:auto;cursor:pointer;white-space:nowrap}.logo b{color:var(--gold)}
+nav a{padding:8px 14px;border-radius:99px;cursor:pointer;color:var(--mut);font-weight:700;white-space:nowrap}
+nav a.on{background:var(--ink);color:var(--bg)}
+main{max-width:1180px;margin:0 auto;padding:28px 24px 60px}
+.truckband{height:14px;background:repeating-linear-gradient(90deg,var(--gold) 0 18px,var(--rani) 18px 30px,var(--teal) 30px 48px,var(--ink) 48px 54px)}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center;padding:24px 0}
+.hero h1{font-size:clamp(34px,5vw,58px);line-height:1.02}
+.hero p{color:var(--mut);font-size:17px;max-width:48ch}
+.btn{display:inline-block;border:0;border-radius:12px;padding:12px 20px;font:700 15px inherit;font-family:inherit;cursor:pointer;background:var(--ink);color:var(--bg)}
+.btn.g{background:var(--gold);color:#14213d}.btn.o{background:none;border:1.5px solid var(--line);color:var(--ink)}
+.btn:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.svc{cursor:pointer;transition:transform .15s}.svc:hover{transform:translateY(-3px)}
+.svc .ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:22px;margin-bottom:10px;background:var(--gold)}
+.tag{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;background:var(--line);color:var(--ink)}
+.tag.fair{background:#d6f3e4;color:#0b5c39}.tag.low{background:#d9ecff;color:#0b4a8f}.tag.high{background:#ffdbe6;color:#9c0f3d}
+.two{display:grid;grid-template-columns:1.2fr .8fr;gap:20px}
+label{display:block;font-weight:700;font-size:13px;margin:14px 0 6px;color:var(--mut)}
+input,select{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+input[type=range]{padding:0;accent-color:var(--teal)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg div{border:2px solid var(--line);border-radius:12px;padding:12px;cursor:pointer}.seg div.on{border-color:var(--teal);background:color-mix(in srgb,var(--teal) 10%,transparent)}
+.total{font:800 40px 'Bricolage Grotesque',sans-serif}
+.row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.steps{display:flex;gap:8px;margin:14px 0}.steps span{flex:1;height:8px;border-radius:9px;background:var(--line)}.steps span.d{background:var(--teal)}
+.ph{height:150px;border-radius:12px;margin-bottom:12px;display:grid;place-items:center;font-size:44px}
+.modal{position:fixed;inset:0;background:#000a;display:none;place-items:center;z-index:9;padding:16px}.modal.show{display:grid}
+.modal .card{max-width:560px;width:100%;max-height:90vh;overflow:auto}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.pills .tag{cursor:pointer;padding:7px 14px}.pills .tag.on{background:var(--ink);color:var(--bg)}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}
+.scroll{overflow-x:auto}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:12px;display:none;z-index:10}
+@media(max-width:820px){.hero,.two{grid-template-columns:1fr}main{padding:20px 16px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<nav><div class="logo" onclick="go('home')">Movers<b>4U</b></div>
+<a data-p="shift">Shifting</a><a data-p="homes">Homes</a><a data-p="furn">Furniture</a><a data-p="tools">Smart tools</a><a data-p="track">Tracking</a><a data-p="admin">Admin</a></nav>
+<div class="truckband"></div>
+<main id="app"></main>
+<div class="modal" id="modal"><div class="card" id="mc"></div></div><div class="toast" id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),pk=n=>'Rs '+Math.round(n).toLocaleString('en-PK');
+const st={svc:'simple',km:12,rooms:2,floor:1,lift:false,pay:'cash',bundle:[],deal:{},how:{},booked:null,mode:'rent',city:'All',fAge:'All'};
+const rate={Karachi:{rent:75,sale:21000},Lahore:{rent:68,sale:19500},Islamabad:{rent:95,sale:30000}};
+const H=[
+{id:1,t:'2-bed flat, Gulshan-e-Iqbal',c:'Karachi',m:'rent',a:900,p:68000,bd:2,e:'🏢',sch:8,hos:7,cm:35},
+{id:2,t:'3-bed upper portion, DHA Phase 5',c:'Karachi',m:'rent',a:1500,p:125000,bd:3,e:'🏠',sch:9,hos:8,cm:25},
+{id:3,t:'1-bed apartment, Bahria Town',c:'Lahore',m:'rent',a:600,p:32000,bd:1,e:'🏙️',sch:6,hos:5,cm:40},
+{id:4,t:'2-bed flat, F-11 Markaz',c:'Islamabad',m:'rent',a:1000,p:98000,bd:2,e:'🏢',sch:9,hos:9,cm:18},
+{id:5,t:'5 marla house, Johar Town',c:'Lahore',m:'sale',a:1125,p:21500000,bd:3,e:'🏡',sch:8,hos:8,cm:30},
+{id:6,t:'10 marla house, Gulberg',c:'Lahore',m:'sale',a:2250,p:49000000,bd:5,e:'🏘️',sch:9,hos:9,cm:20},
+{id:7,t:'3-bed flat, Clifton Block 5',c:'Karachi',m:'sale',a:1400,p:36000000,bd:3,e:'🌇',sch:8,hos:9,cm:28},
+{id:8,t:'1 kanal house, E-11',c:'Islamabad',m:'sale',a:4500,p:210000000,bd:6,e:'🏰',sch:9,hos:8,cm:22}];
+const F=[
+{id:1,t:'L-shaped sofa set',p:45000,cond:'Like new',e:'🛋️',c:'Karachi'},{id:2,t:'Solid sheesham bed',p:62000,cond:'Used – good',e:'🛏️',c:'Lahore'},
+{id:3,t:'6-seater dining table',p:38000,cond:'Used – fair',e:'🍽️',c:'Islamabad'},{id:4,t:'Double-door fridge',p:54000,cond:'Like new',e:'🧊',c:'Karachi'},
+{id:5,t:'Wardrobe, 4-door',p:29000,cond:'Used – good',e:'🚪',c:'Lahore'},{id:6,t:'Study desk and chair',p:14000,cond:'Used – fair',e:'🪑',c:'Karachi'}];
+const W=[{n:'Imran Qureshi',r:4.8,j:214,v:'Suzuki Ravi'},{n:'Bilal Ahmed',r:4.6,j:167,v:'Shehzore'},{n:'Sajid Khan',r:4.9,j:301,v:'Mazda T3500'}];
+function est(h){const r=rate[h.c][h.m];return h.a*r}
+function verdict(h){const e=est(h),d=(h.p-e)/e;return d<-.12?['low','Underpriced']:d>.12?['high','Overpriced']:['fair','Fair price']}
+function cost(){let b=st.svc=='simple'?3500:6500;const dist=st.km*(st.svc=='simple'?110:140);const sz=st.rooms*(st.svc=='simple'?1800:2600);
+let lab=0,pack=0;if(st.svc=='full'){lab=st.rooms*1500;pack=st.rooms*2200}
+const stairs=st.lift?0:Math.max(0,st.floor-1)*600;const items=[['Base fare',b],['Distance ('+st.km+' km)',dist],['Load size ('+st.rooms+' rooms)',sz]];
+if(st.svc=='full'){items.push(['Labour crew',lab],['Packing materials and wrap',pack])}if(stairs)items.push(['Stairs (floor '+st.floor+')',stairs]);
+const sub=items.reduce((s,i)=>s+i[1],0),b2=st.bundle.length?-Math.round(sub*.08):0;if(b2)items.push(['Bundle discount (8%)',b2]);return{items,total:sub+b2}}
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2400)}
+function modal(h){$('#mc').innerHTML=h;$('#modal').classList.add('show')}$('#modal').onclick=e=>{if(e.target.id=='modal')e.target.classList.remove('show')}
+const P={
+home(){return`<div class="hero"><div><h1>Move house. Find a home. Furnish it. One app.</h1>
+<p>Movers4U brings verified shifting crews, fair-priced homes and second-hand furniture together for Karachi, Lahore and Islamabad, with live tracking and JazzCash after the job.</p>
+<p style="margin-top:20px"><button class="btn g" onclick="go('shift')">Book a mover</button> <button class="btn o" onclick="go('homes')">Browse homes</button></p></div>
+<div class="card" style="background:var(--ink);color:#fff"><svg viewBox="0 0 420 220" width="100%" role="img" aria-label="Truck on a route"><rect width="420" height="220" rx="14" fill="#1c2d57"/><path d="M30 170 C120 60 200 200 300 90 S380 60 395 50" stroke="#fca311" stroke-width="5" stroke-dasharray="2 14" stroke-linecap="round" fill="none"/>
+<circle cx="30" cy="170" r="9" fill="#0e7c7b"/><circle cx="395" cy="50" r="9" fill="#d81e5b"/><g transform="translate(176,98)"><rect width="46" height="28" rx="4" fill="#fca311"/><rect x="46" y="8" width="20" height="20" rx="4" fill="#fff"/><circle cx="12" cy="30" r="6" fill="#14213d" stroke="#fff" stroke-width="2"/><circle cx="52" cy="30" r="6" fill="#14213d" stroke="#fff" stroke-width="2"/></g></svg>
+<div style="display:flex;justify-content:space-between;margin-top:10px"><span>Pickup confirmed</span><b style="color:#fca311">Truck 12 min away</b></div></div></div>
+<div class="grid">${[['🚚','Shifting','Simple transport or full packing with labour','shift'],['🏠','Rent a home','Listings with a fairness check on every price','homes'],['🏢','Buy a home','Price estimator and affordability planner','homes'],['🛋️','Furniture market','Buy and sell second-hand, graded by condition','furn']].map(s=>`<div class="card svc" tabindex="0" onclick="go('${s[3]}')"><div class="ic">${s[0]}</div><h3>${s[1]}</h3><p style="color:var(--mut);margin:6px 0 0">${s[2]}</p></div>`).join('')}</div>
+<div class="grid" style="margin-top:16px">${[['12,400+','moves planned'],['4.8 / 5','average worker rating'],['3 cities','Karachi, Lahore, Islamabad'],['0 advance','pay after the service']].map(s=>`<div class="card"><h2>${s[0]}</h2><span style="color:var(--mut)">${s[1]}</span></div>`).join('')}</div>`},
+shift(){const c=cost();return`<h2>Book a shifting service</h2><div class="steps"><span class="d"></span><span class="${st.booked?'d':''}"></span><span></span></div>
+<div class="two"><div class="card"><label>Service type</label><div class="seg"><div class="${st.svc=='simple'?'on':''}" onclick="set('svc','simple')"><b>Simple transport</b><br><small>Vehicle and driver only</small></div><div class="${st.svc=='full'?'on':''}" onclick="set('svc','full')"><b>Full packing</b><br><small>Packing, labour, loading</small></div></div>
+<label>Pickup area</label><select><option>Gulshan-e-Iqbal, Karachi</option><option>DHA Phase 5, Karachi</option><option>Johar Town, Lahore</option><option>F-11, Islamabad</option></select>
+<label>Drop-off area</label><select><option>Clifton Block 5, Karachi</option><option>Bahria Town, Lahore</option><option>E-11, Islamabad</option></select>
+<label>Distance: <b>${st.km} km</b></label><input type="range" min="2" max="60" value="${st.km}" oninput="set('km',+this.value,1)">
+<label>Rooms to move: <b>${st.rooms}</b></label><input type="range" min="1" max="6" value="${st.rooms}" oninput="set('rooms',+this.value,1)">
+<label>Floor: <b>${st.floor}</b> ${'<span style="font-weight:500">(no lift)</span>'}</label><input type="range" min="1" max="8" value="${st.floor}" oninput="set('floor',+this.value,1)">
+<label><input type="checkbox" style="width:auto" ${st.lift?'checked':''} onchange="set('lift',this.checked,1)"> Building has a working lift</label></div>
+<div class="card"><h3>Your estimate</h3>${c.items.map(i=>`<div class="row"><span>${i[0]}</span><b>${i[1]<0?'− '+pk(-i[1]):pk(i[1])}</b></div>`).join('')}
+<div style="margin:14px 0"><span style="color:var(--mut)">Total</span><div class="total">${pk(c.total)}</div></div>
+<label>Pay after the service</label><div class="seg"><div class="${st.pay=='cash'?'on':''}" onclick="set('pay','cash')">💵 Cash</div><div class="${st.pay=='jazz'?'on':''}" onclick="set('pay','jazz')">📱 JazzCash</div></div>
+${st.bundle.length?`<p class="tag fair" style="margin-top:12px">Bundle: ${st.bundle.length} item(s) with this move</p>`:''}
+<p><button class="btn g" style="width:100%;margin-top:14px" onclick="book()">Confirm booking</button></p></div></div>`},
+track(){if(!st.booked)return`<div class="card"><h2>No active move</h2><p style="color:var(--mut)">Book a mover to see live tracking here.</p><button class="btn g" onclick="go('shift')">Book a mover</button></div>`;
+const w=W[2];return`<h2>Live tracking</h2><div class="two"><div class="card"><svg id="map" viewBox="0 0 600 330" width="100%" role="img" aria-label="Route map"><rect width="600" height="330" rx="12" fill="#dfe9f0"/><g stroke="#fff" stroke-width="10"><path d="M0 90H600M0 240H600M150 0V330M420 0V330"/></g>
+<path id="rt" d="M60 270 C160 120 260 290 360 150 S500 80 545 50" fill="none" stroke="#0e7c7b" stroke-width="6" stroke-dasharray="3 12" stroke-linecap="round"/>
+<circle cx="60" cy="270" r="10" fill="#0e7c7b"/><circle cx="545" cy="50" r="10" fill="#d81e5b"/><text x="75" y="295" font-size="14" fill="#14213d" font-weight="700">Pickup</text><text x="470" y="35" font-size="14" fill="#14213d" font-weight="700">Drop-off</text>
+<g id="tk"><circle r="16" fill="#fca311" stroke="#14213d" stroke-width="3"/><text y="6" text-anchor="middle" font-size="16">🚚</text></g></svg>
+<div class="steps"><span class="d"></span><span id="s2"></span></div><b id="ph">Phase 1: truck heading to pickup</b></div>
+<div class="card"><h3>Your crew</h3><div class="row"><span>Driver</span><b>${w.n}</b></div><div class="row"><span>Vehicle</span><b>${w.v}</b></div><div class="row"><span>Rating</span><b>⭐ ${w.r} (${w.j} jobs)</b></div><div class="row"><span>Service</span><b>${st.svc=='simple'?'Simple transport':'Full packing'}</b></div><div class="row"><span>Payable</span><b>${pk(cost().total)} · ${st.pay=='cash'?'Cash':'JazzCash'}</b></div>
+<p><button class="btn" style="width:100%" onclick="finish()">Mark service complete and pay</button></p></div></div>`},
+homes(){const L=H.filter(h=>h.m==st.mode&&(st.city=='All'||h.c==st.city));return`<h2>Homes</h2><div class="pills">${['rent','sale'].map(m=>`<span class="tag ${st.mode==m?'on':''}" onclick="set('mode','${m}')">${m=='rent'?'For rent':'For sale'}</span>`).join('')}<span style="width:12px"></span>${['All','Karachi','Lahore','Islamabad'].map(c=>`<span class="tag ${st.city==c?'on':''}" onclick="set('city','${c}')">${c}</span>`).join('')}</div>
+<div class="grid">${L.map(h=>{const v=verdict(h);return`<div class="card svc" tabindex="0" onclick="home(${h.id})"><div class="ph" style="background:linear-gradient(135deg,#fca31133,#0e7c7b33)">${h.e}</div><span class="tag ${v[0]}">${v[1]}</span><h3 style="margin-top:8px;font-size:18px">${h.t}</h3><p style="margin:4px 0;color:var(--mut)">${h.c} · ${h.bd} bed · ${h.a} sq ft</p><b style="font-size:18px">${pk(h.p)}${h.m=='rent'?' / month':''}</b></div>`}).join('')}</div>`},
+furn(){return`<h2>Furniture market</h2><p style="color:var(--mut)">Every listing shows its condition. Contact the seller, buy, then add delivery to your move and save 8% on shifting.</p><div class="grid">${F.map(f=>`<div class="card"><div class="ph" style="background:#fca31122">${f.e}</div><h3 style="font-size:18px">${f.t}</h3><p style="margin:4px 0"><span class="tag">${f.cond}</span> <span style="color:var(--mut)">${f.c}</span></p><b>${pk(f.p)}</b><p><button class="btn g" onclick="fur(${f.id})">${dl('f'+f.id)>1?'Bought: arrange delivery':dl('f'+f.id)?'Continue to buy':'View and contact seller'}</button></p></div>`).join('')}</div>
+<div class="card" style="margin-top:16px"><h3>Sell your furniture</h3><p style="color:var(--mut)">List in two minutes. Choose the condition so buyers know what to expect.</p><button class="btn" onclick="toast('Listing form opens here in the full build')">Create a listing</button></div>`},
+tools(){return`<h2>Smart tools</h2><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+<div class="card"><h3>Affordability calculator</h3><label>Monthly income (Rs)</label><input id="inc" type="number" value="180000" oninput="aff()"><label>Monthly debts (Rs)</label><input id="dbt" type="number" value="15000" oninput="aff()"><label>Savings for down payment (Rs)</label><input id="sv" type="number" value="3000000" oninput="aff()"><div id="affo"></div></div>
+<div class="card"><h3>Price estimator</h3><label>City</label><select id="ec" onchange="pe()"><option>Karachi</option><option>Lahore</option><option>Islamabad</option></select><label>Area (sq ft)</label><input id="ea" type="number" value="1000" oninput="pe()"><label>Purpose</label><select id="em" onchange="pe()"><option value="rent">Rent</option><option value="sale">Sale</option></select><div id="peo"></div></div>
+<div class="card"><h3>Commute time</h3><label>Home area</label><select id="ch" onchange="cm()"><option value="1">Gulshan-e-Iqbal</option><option value="2">DHA</option><option value="3">Bahria Town</option></select><label>Workplace</label><select id="cw" onchange="cm()"><option value="1">I.I. Chundrigar Road</option><option value="2">Clifton</option><option value="3">Shahrah-e-Faisal</option></select><div id="cmo"></div></div>
+<div class="card"><h3>Interior design preview</h3><label>Room style</label><div class="pills" id="sty">${['Modern','Classic','Minimal'].map((s,i)=>`<span class="tag ${i?'':'on'}" onclick="sty(${i})">${s}</span>`).join('')}</div><div id="room" class="ph" style="height:170px;background:#e7e2d9"></div></div></div>`},
+admin(){const m=[42,55,61,48,72,88,95];return`<h2>Admin dashboard</h2><div class="grid" style="margin-bottom:16px">${[['Bookings today','86'],['Revenue (week)',pk(1840000)],['Active workers','54'],['Avg rating','4.7']].map(k=>`<div class="card"><span style="color:var(--mut)">${k[0]}</span><h2>${k[1]}</h2></div>`).join('')}</div>
+<div class="two"><div class="card"><h3>Bookings this week</h3><svg viewBox="0 0 400 180" width="100%" role="img" aria-label="Bar chart of bookings per day">${m.map((v,i)=>`<rect x="${i*56+14}" y="${160-v*1.5}" width="40" height="${v*1.5}" rx="6" fill="${i==6?'#fca311':'#0e7c7b'}"/><text x="${i*56+34}" y="175" text-anchor="middle" font-size="11" fill="currentColor">${'MTWTFSS'[i]}</text>`).join('')}</svg></div>
+<div class="card"><h3>Register a worker</h3><label>Full name</label><input id="wn" placeholder="e.g. Kamran Ali"><label>Vehicle</label><select><option>Suzuki Ravi</option><option>Shehzore</option><option>Mazda T3500</option></select><p><button class="btn g" onclick="addW()">Register worker</button></p></div></div>
+<div class="card scroll" style="margin-top:16px"><h3>Workers</h3><table id="wt"><tr><th>Name</th><th>Vehicle</th><th>Rating</th><th>Jobs</th></tr>${W.map(w=>`<tr><td>${w.n}</td><td>${w.v}</td><td>⭐ ${w.r}</td><td>${w.j}</td></tr>`).join('')}</table></div>`}};
+function home(id){const h=H.find(x=>x.id==id),v=verdict(h),e=est(h);modal(`<div class="ph" style="background:#fca31133">${h.e}</div><h2>${h.t}</h2><p><span class="tag ${v[0]}">${v[1]}</span> <span style="color:var(--mut)">Estimated fair value ${pk(e)}${h.m=='rent'?' / month':''}</span></p>
+<div class="row"><span>Asking price</span><b>${pk(h.p)}</b></div><div class="row"><span>School proximity score</span><b>${h.sch}/10</b></div><div class="row"><span>Hospital proximity score</span><b>${h.hos}/10</b></div><div class="row"><span>Commute to city centre</span><b>${h.cm} min</b></div>
+${dealUI('h'+h.id,h)}`)}
+const dl=k=>st.deal[k]||0,reopen=k=>k[0]=='h'?home(+k.slice(1)):fur(+k.slice(1));
+function dealUI(k,it){const s=dl(k),h=k[0]=='h',rent=h&&it.m=='rent',dis=n=>s<n?'disabled style="opacity:.4"':'',note=t=>`<small style="color:var(--mut)">${t}</small>`,
+row=(n,t,d,b)=>`<div class="card" style="margin-top:10px;padding:14px;${d?'border-color:var(--teal)':''}"><b>${d?'✅ ':''}Step ${n}: ${t}</b>${b}</div>`;
+const c1=s>0?`<p style="margin:6px 0 0;color:var(--mut)">${st.how[k]}</p>`:h?`<label>Preferred tour slot</label><select id="slot"><option>Saturday, 4:00 pm</option><option>Sunday, 11:00 am</option><option>Monday, 6:00 pm</option></select><p><button class="btn g" onclick="contact('${k}','tour')">Request a tour</button> <button class="btn o" onclick="contact('${k}','chat')">Contact owner</button></p>`:`<p><button class="btn g" onclick="contact('${k}','chat')">Message seller</button> <button class="btn o" onclick="contact('${k}','tour')">Request inspection</button></p>`;
+const c2=s>1?`<p style="margin:6px 0 0;color:var(--mut)">${h?(rent?'Rental confirmed. Owner notified.':'Offer accepted. Sale in progress.'):'Purchase confirmed. Seller notified.'}</p>`:`<p><button class="btn g" ${dis(1)} onclick="buyit('${k}')">${h?(rent?'Confirm rental':'Make offer and buy'):'Buy now'}</button></p>${s<1?note('Unlocks after you contact the '+(h?'owner or request a tour':'seller')):''}`;
+const c3=`<p><button class="btn g" ${dis(2)} onclick="ship('${k}')">${h?'Book shifting':'Add delivery to my move'}</button></p>${s<2?note('Unlocks after '+(h?(rent?'renting':'buying')+' the home':'buying the item')):note('8% bundle discount applies')}`;
+return row(1,h?'Tour or contact owner':'Contact the seller',s>0,c1)+row(2,h?(rent?'Rent the home':'Buy the home'):'Buy the item',s>1,c2)+row(3,'Shift',st.bundle.includes(k),c3)}
+function contact(k,t){const h=k[0]=='h',sl=$('#slot');st.how[k]=t=='tour'?(h?'Tour requested: '+(sl?sl.value:'this weekend'):'Inspection requested. The seller will confirm a time.'):'Message sent. The '+(h?'owner':'seller')+' will reply on WhatsApp.';st.deal[k]=1;toast(t=='tour'?'Request sent':'Message sent');reopen(k)}
+function buyit(k){st.deal[k]=2;toast('Confirmed');reopen(k)}
+function ship(k){if(!st.bundle.includes(k))st.bundle.push(k);$('#modal').classList.remove('show');toast('Added to your move');go('shift')}
+function fur(id){const f=F.find(x=>x.id==id),n=f.cond=='Like new';modal(`<div class="ph" style="background:#fca31133">${f.e}</div><h2>${f.t}</h2><p><span class="tag">${f.cond}</span> <span style="color:var(--mut)">${f.c}</span></p><div class="row"><span>Price</span><b>${pk(f.p)}</b></div><div class="row"><span>${n?'Return window':'Inspection'}</span><b>${n?'3 days':'Before you pay'}</b></div>${dealUI('f'+id,f)}`)}
+function set(k,v,keep){st[k]=v;go(cur,keep)}
+function book(){st.booked=1;toast('Booking confirmed. Crew assigned.');go('track')}
+function finish(){modal(`<h2>Service complete</h2><p>Pay ${pk(cost().total)} by ${st.pay=='cash'?'cash to the driver':'JazzCash'}.</p><label>Rate Sajid Khan</label><div class="pills">${[1,2,3,4,5].map(n=>`<span class="tag" onclick="this.parentNode.querySelectorAll('.tag').forEach((t,i)=>t.classList.toggle('on',i<${n}))">${'⭐'.repeat(n)}</span>`).join('')}</div><button class="btn g" onclick="st.booked=null;$('#modal').classList.remove('show');toast('Payment recorded. Thank you!');go('home')">Pay and submit rating</button>`)}
+function aff(){const i=+$('#inc').value,d=+$('#dbt').value,s=+$('#sv').value,emi=Math.max(0,i*.4-d),loan=emi*12*8,dp=s;$('#affo').innerHTML=`<div class="row"><span>Comfortable rent</span><b>${pk(i*.33)}</b></div><div class="row"><span>Max monthly instalment</span><b>${pk(emi)}</b></div><div class="row"><span>Estimated buying budget</span><b>${pk(loan+dp)}</b></div>`}
+function pe(){const r=rate[$('#ec').value][$('#em').value]*(+$('#ea').value);const m=$('#em').value;$('#peo').innerHTML=`<div class="total" style="margin-top:12px">${pk(r)}</div><span style="color:var(--mut)">${m=='rent'?'per month':'estimated sale value'} · range ${pk(r*.9)} to ${pk(r*1.1)}</span>`}
+function cm(){const t=8+Math.abs($('#ch').value-$('#cw').value)*14+$('#ch').value*6;$('#cmo').innerHTML=`<div class="total" style="margin-top:12px">${t} min</div><span style="color:var(--mut)">By car at 8:30 am. Off-peak: ${Math.round(t*.65)} min</span>`}
+function sty(i){document.querySelectorAll('#sty .tag').forEach((t,j)=>t.classList.toggle('on',i==j));const c=[['#d9d2c5','#14213d','#fca311'],['#e8d9c1','#7a3b2e','#c9a227'],['#eef0f2','#9aa6b2','#0e7c7b']][i];$('#room').style.background=c[0];$('#room').innerHTML=`<svg viewBox="0 0 300 150" width="100%"><rect y="110" width="300" height="40" fill="${c[1]}22"/><rect x="40" y="70" width="120" height="44" rx="10" fill="${c[1]}"/><rect x="40" y="55" width="120" height="22" rx="8" fill="${c[1]}"/><rect x="200" y="30" width="60" height="80" rx="4" fill="${c[2]}"/><circle cx="230" cy="20" r="8" fill="${c[2]}"/></svg>`}
+function addW(){const n=$('#wn').value.trim();if(!n)return toast('Enter the worker’s name');W.push({n,r:'New',j:0,v:'Suzuki Ravi'});$('#wt').insertAdjacentHTML('beforeend',`<tr><td>${n}</td><td>Suzuki Ravi</td><td>New</td><td>0</td></tr>`);$('#wn').value='';toast('Worker registered')}
+let cur='home',anim;
+function go(p,keep){const y=scrollY;cur=p;cancelAnimationFrame(anim);$('#app').innerHTML=P[p]();document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.p==p));
+if(p=='tools'){aff();pe();cm();sty(0)}if(p=='track'&&st.booked)run();scrollTo(0,keep?y:0);try{history.replaceState(null,'','#'+p)}catch(e){}}
+function run(){const r=$('#rt'),L=r.getTotalLength(),tk=$('#tk');let t0=performance.now();(function f(n){const k=Math.min(1,(n-t0)/14000),q=k<.4?k/.4*.5:.5+(k-.4)/.6*.5,pt=r.getPointAtLength(q*L);tk.setAttribute('transform',`translate(${pt.x},${pt.y})`);
+const second=k>=.4;$('#s2').className=second?'d':'';$('#ph').textContent=second?'Phase 2: moving your belongings to the new home':'Phase 1: truck heading to pickup';if(k<1)anim=requestAnimationFrame(f)})(t0)}
+document.querySelectorAll('nav a').forEach(a=>{a.tabIndex=0;a.onclick=()=>go(a.dataset.p)});
+const h0=location.hash.slice(1);go(P[h0]?h0:'home');
+</script></body></html>
